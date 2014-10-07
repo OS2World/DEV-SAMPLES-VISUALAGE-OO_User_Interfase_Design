@@ -1,0 +1,46 @@
+sizeAWindow: aWindow
+	"Size the argument window proportional to the current
+	 screen size based on the development screen size.  
+
+	 This should be executed when #aboutToOpenWidget."
+
+	| windowWidth windowHeight ratio |
+
+"Ensure argument is a VisualAge window"
+
+	(aWindow class inheritsFrom: AbtBasicView)
+		ifFalse: [self error: '#sizeAWindow argument is not a visual part.'].
+
+"Intialize the class variables if necessary"
+	(CurrentScreenWidth isNil)
+		ifTrue: [self initialize].
+
+"Get the Width and Height of argument window"
+	windowWidth := (aWindow primaryWidget width) asFloat.
+	windowHeight := (aWindow primaryWidget height) asFloat.
+
+"Calculate screen size ratio.  Assumes that the ratio is
+ the same for the width and height."
+
+	ratio := ((CurrentScreenWidth asFloat) 
+			/ 
+			(DevelopmentSystemScreenWidth asFloat)).
+
+"Adjust ratio based on experiments of VGA to XGA 
+ and XGA to VGA."
+
+"VGA to XGA"
+	(ratio = (1024 asFloat / 640 asFloat) )
+		ifTrue: [ratio := 1.3].
+"XGA to VGA"
+	(ratio = (640 asFloat / 1024 asFloat) )
+		ifTrue: [ratio := 0.85].
+
+"Compute new window size based on the ratio of 
+ the current display to the development display"
+	windowWidth := (ratio * windowWidth) asInteger.
+	windowHeight := (ratio * windowHeight) asInteger.
+
+"Set the new window size"
+	aWindow primaryWidget width: windowWidth.
+	aWindow primaryWidget height: windowHeight.

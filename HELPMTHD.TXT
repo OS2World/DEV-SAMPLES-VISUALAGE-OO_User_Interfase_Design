@@ -1,0 +1,13 @@
+intializeWindow
+	"Check to see if a file name was passed.
+	 If so, get the help text from it.
+	 If not, use default text.
+
+	Invoked by #aboutToOpenWidget."
+
+	( ((self partAttributeValue: #(#'HelpFile' #self)) isNil)
+		or: [(self partAttributeValue: #(#'HelpFile' #self)) size = 0] )
+			ifTrue: [
+				self partAttributeValue: #(#'HelpText' #self) 
+					 put: 'This would use the OS/2 Help Facitity to show the selected help.'.]
+			ifFalse: [self readTextFromFile.].

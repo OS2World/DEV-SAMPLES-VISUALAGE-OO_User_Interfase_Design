@@ -1,0 +1,42 @@
+positionSizeWindowAtX: x atY: y
+	"Set the initial window position and adjust 
+	 initial window size to the current system.
+
+	 Invoke with #aboutToOpenWidget event.
+
+	 Note: assumes the window part is named Window"
+
+"Set initial position."
+	(self partAttributeValue: #(#'Window' #self))
+		primaryWidget x: x asNumber.
+	(self partAttributeValue: #(#'Window' #self))
+		primaryWidget y: y asNumber.
+
+"Set size of development environment screen"
+
+	ScreenFunctions developmentScreenWidth: 640.
+	ScreenFunctions developmentScreenHeight: 480.
+
+"Size the window"
+	ScreenFunctions sizeAWindow: 
+		(self partAttributeValue: #(#'Window' #self)).
+
+
+
+
+
+helpWithTitle: titleString inFile: fileNameString
+	"Display generic Help window.
+
+	 Invoked by F1 key.
+
+	 Note: assumes help window part is named Window_Help.
+		   The HelpWindow instance has two variables, HelpTitle 
+		   and HelpFile."
+
+	self partAttributeValue: #(#'Window_Help' #HelpTitle) 
+		put: titleString.
+	self partAttributeValue: #(#'Window_Help' #HelpFile) 
+		put: fileNameString.
+	(self subpartNamed: #'Window_Help') performActionNamed: 
+		#openWidget.
